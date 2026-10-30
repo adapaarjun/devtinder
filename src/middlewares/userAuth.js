@@ -6,8 +6,7 @@ const userAuth = async (req,res,next)=>{
     try{
     const {token} = req.cookies;
     if(!token || token === "j:null"){
-      console.log(token);
-      throw new Error('Session Expired')
+      throw new Error('Session Expired!Please Login')
     }
     const decodedData = await jwt.verify(token,"Dev@tinder1909");
     const {_id} = decodedData;
@@ -18,7 +17,7 @@ const userAuth = async (req,res,next)=>{
     req.user = user;
     next();
     }catch(err){
-      res.status(400).send('Error message from userauth:' + err.message)
+      res.status(401).send('Error message from userauth:' + err.message)
     }
 }
 

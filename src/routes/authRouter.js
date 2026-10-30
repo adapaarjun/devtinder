@@ -9,13 +9,14 @@ const authRouter = express.Router();
 
 authRouter.post('/signup',async(req,res)=>{
   try{
-    const {firstName,lastName,emailId,password} = req.body;
+    const {firstName,lastName,emailId,password,photoUrl} = req.body;
     const passwordHash = await bcrypt.hash(password,10)
     validationSignUp(req)
     const user = new User({
       firstName,
       lastName,
       emailId,
+      photoUrl,
       password:passwordHash
     })
    await user.save();
@@ -38,16 +39,14 @@ authRouter.post('/login',async(req,res)=>{
     }
     const token = await user.getJWT();
     res.cookie('token',token)
-    res.send('Login Successfull')
+    res.send(user)
   }catch(err){
     res.status(404).send("Error:" + err.message)
   }
 })
 
 authRouter.post('/logout',async(req,res)=>{
-   res.cookie('token',null,{
-    expires:new Date(Date.now())
-   });
+   res.clearCookie('token');
    res.send("logged out");
 })
 

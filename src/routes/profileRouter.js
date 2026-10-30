@@ -11,7 +11,7 @@ profileRouter.get('/profile/view',userAuth,async(req,res)=>{
     const user = req.user;
     res.send(user);
   }catch(err){
-    res.status(404).send('Error' + err.message)
+    res.status(404).send("Please Login")
   }
 })
 
@@ -28,7 +28,6 @@ profileRouter.patch('/profile/edit',async(req,res)=>{
       throw new Error('User does not exist');
     }
     const isAllowedEdit = validateProfileData(req);
-    console.log(isAllowedEdit);
     if(!isAllowedEdit){
       throw new Error('Editing is not permitted');
     }

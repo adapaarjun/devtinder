@@ -6,7 +6,7 @@ const User = require('../models/user');
 
 const userRouter = express.Router();
 
-userRouter.get('/user/requests/recieved',userAuth,async(req,res)=>{
+userRouter.get('/requests',userAuth,async(req,res)=>{
   try{
     const loggedInUser = req.user;
     if(!loggedInUser){
@@ -15,7 +15,7 @@ userRouter.get('/user/requests/recieved',userAuth,async(req,res)=>{
     const userRequestObj = await connectionRequest.find({
       status:'interested',
       toUserId:loggedInUser._id
-    }).populate('fromUserId','firstName lastName age about skills gender')
+    }).populate('fromUserId','firstName lastName age about skills gender photoUrl')
 
     if(!userRequestObj){
       throw new Error("You don't have any connection requests")
@@ -35,10 +35,10 @@ userRouter.get('/user/requests/recieved',userAuth,async(req,res)=>{
 })
 
 
-userRouter.get('/user/connections/accepted',userAuth,async(req,res)=>{
+userRouter.get('/connections',userAuth,async(req,res)=>{
   try{
     const loggedInUser = req.user;
-    const USER_REQUIREMENTS = 'firstName lastName gender about skills'
+    const USER_REQUIREMENTS = 'firstName lastName gender about skills photoUrl age'
     const connectionsRecieved = await connectionRequest.find({
       $or:[
         {status:'accepted',toUserId:loggedInUser._id},
@@ -88,7 +88,11 @@ userRouter.get('/feed',userAuth,async(req,res)=>{
 
     console.log(connectionsToShow);
 
-    const data = connectionsToShow.map((item) => {
+    //filtering the connections 
+
+    const validConnections = connectionsToShow.filter((item)=>item.fromUserId && item.toUserId)
+
+    const data = validConnections.map((item) => {
       if(item.fromUserId._id.toString() === loggedInUser._id.toString()){
           return item.toUserId
       }else{
@@ -103,7 +107,7 @@ userRouter.get('/feed',userAuth,async(req,res)=>{
           $nin:idsToExclude,
           $ne:loggedInUser._id
         }
-    }).select('firstName lastName age gender skills about').skip(skip).limit(limit);
+    }).select('firstName lastName age gender skills about photoUrl').skip(skip).limit(limit);
 
     res.json({
       message:"Connections in your feed",

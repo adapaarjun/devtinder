@@ -50,7 +50,7 @@ const UserSchema = new mongoose.Schema(
     },
     photoUrl:{
       type:String,
-      defaultValue:'../src/images.jpeg'
+      default:'http://localhost:3000/assets/default.jpeg'
     },
     skills:{
       type:[String]

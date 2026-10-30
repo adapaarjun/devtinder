@@ -58,6 +58,7 @@ requestRouter.post('/request/review/:status/:requestId',userAuth,async(req,res)=
     const loggedInuser = req.user;
     const {status,requestId} = req.params;
     const allowedStatus = ['accepted','rejected'];
+    console.log(`Request ID ${requestId} , status ${status}`)
     const isAllowedStatus = allowedStatus.includes(status);
     if(!isAllowedStatus){
       throw new Error(`${status} is not allowed`);
@@ -88,8 +89,6 @@ requestRouter.post('/request/review/:status/:requestId',userAuth,async(req,res)=
   connectionRequestObj.status = status;
 
   const data = await connectionRequestObj.save();
-
-  console.log(connectionRequest)
 
   res.json({
     message:`Hey ${toUser.firstName} ${toUser.lastName} ${status} the request from ${fromUser.firstName} ${fromUser.lastName}`,
