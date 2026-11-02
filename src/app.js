@@ -22,8 +22,8 @@ app.use('/',requestRouter);
 app.use('/',userRouter);
 
 app.use(
-  "/assets",
-  express.static(path.join(__dirname, "assets"))
+    "/user-assets",
+    express.static(path.join(__dirname, "assets"))
 );
 
 connectDB()
