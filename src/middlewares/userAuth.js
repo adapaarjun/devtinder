@@ -8,7 +8,7 @@ const userAuth = async (req,res,next)=>{
     if(!token || token === "j:null"){
       throw new Error('Session Expired!Please Login')
     }
-    const decodedData = await jwt.verify(token,"Dev@tinder1909");
+    const decodedData = await jwt.verify(token,process.env.JWT_SECRET);
     const {_id} = decodedData;
     const user = await User.findById(_id);
     if(!user){

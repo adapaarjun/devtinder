@@ -3,7 +3,7 @@ const {userAuth} = require('../middlewares/userAuth')
 const User = require('../models/user');
 const { connectionRequest } = require('../models/connectionRequest');
 const  jwt = require('jsonwebtoken');
-
+const sendEmail = require('../utils/sendEmail')
 const requestRouter = express.Router();
 
 requestRouter.post('/request/send/:status/:toUserId',async(req,res)=>{
@@ -43,12 +43,18 @@ requestRouter.post('/request/send/:status/:toUserId',async(req,res)=>{
     })
    const requestSentToUser = await User.findById(toUserId);
    const data = await requestModel.save();
+   const emailRes = await sendEmail.run(
+    "A new friend request from " + user.firstName,user.firstName +" " + "is" + " " + status + " "+"in" + " " + requestSentToUser.firstName
+   );
+
+   console.log(emailRes)
 
     res.json({
       message:`Hey ${user.firstName} your connection request is sent to ${requestSentToUser.firstName}`,
       data
     })
   }catch(err){
+    console.error("SEND REQUEST ERROR:", err.message);
     res.status(400).send('Err:' + err.message)
   }
 })

@@ -1,3 +1,6 @@
+require("dotenv").config({
+  path: require("path").resolve(__dirname, "../.env"),
+});
 const express = require("express");
 const connectDB = require("./config/database");
 const cookieParser = require("cookie-parser");
@@ -9,8 +12,14 @@ const cors = require('cors');
 const path = require('path')
 const app = express();
 
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://nextgendreaminteriors.in",
+  "https://www.nextgendreaminteriors.in"
+];
+
 app.use(cors({
-  origin:"http://localhost:5173",
+  origin:allowedOrigins,
   credentials:true
 }));
 app.use(express.json());
