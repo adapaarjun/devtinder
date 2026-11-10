@@ -86,8 +86,6 @@ userRouter.get('/feed',userAuth,async(req,res)=>{
       ]
     }).populate('fromUserId','firstName lastName').populate('toUserId','firstName lastName')
 
-    console.log(connectionsToShow);
-
     //filtering the connections 
 
     const validConnections = connectionsToShow.filter((item)=>item.fromUserId && item.toUserId)

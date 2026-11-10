@@ -47,8 +47,6 @@ requestRouter.post('/request/send/:status/:toUserId',async(req,res)=>{
     "A new friend request from " + user.firstName,user.firstName +" " + "is" + " " + status + " "+"in" + " " + requestSentToUser.firstName
    );
 
-   console.log(emailRes)
-
     res.json({
       message:`Hey ${user.firstName} your connection request is sent to ${requestSentToUser.firstName}`,
       data
@@ -64,7 +62,6 @@ requestRouter.post('/request/review/:status/:requestId',userAuth,async(req,res)=
     const loggedInuser = req.user;
     const {status,requestId} = req.params;
     const allowedStatus = ['accepted','rejected'];
-    console.log(`Request ID ${requestId} , status ${status}`)
     const isAllowedStatus = allowedStatus.includes(status);
     if(!isAllowedStatus){
       throw new Error(`${status} is not allowed`);
@@ -74,8 +71,6 @@ requestRouter.post('/request/review/:status/:requestId',userAuth,async(req,res)=
       toUserId:loggedInuser._id,
       _id:requestId
     }) 
-
-    console.log(connectionRequestObj)
 
     const ConnectionRequestDetails = await connectionRequest.findById(requestId);
 
