@@ -9,7 +9,8 @@ const { profileRouter } = require("./routes/profileRouter");
 const { requestRouter } = require("./routes/requestRouter");
 const { userRouter } = require("./routes/userRouter");
 const cors = require('cors');
-const path = require('path')
+const path = require('path');
+const paymentRouter = require("./routes/paymentRouter");
 const app = express();
 
 const allowedOrigins = [
@@ -29,6 +30,7 @@ app.use('/',authRouter);
 app.use('/',profileRouter);
 app.use('/',requestRouter);
 app.use('/',userRouter);
+app.use('/',paymentRouter)
 
 app.use(
     "/user-assets",

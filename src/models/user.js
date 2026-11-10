@@ -55,6 +55,13 @@ const UserSchema = new mongoose.Schema(
     skills:{
       type:[String]
     },
+    isPremium:{
+      type:Boolean,
+      default:false
+    },
+    memberShipType:{
+      type:String
+    },
     about:{
       type:String
     }
