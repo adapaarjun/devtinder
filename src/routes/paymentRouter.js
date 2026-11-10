@@ -52,6 +52,7 @@ paymentRouter.post("/payment/create", userAuth, async (req, res) => {
 
 
 paymentRouter.post("/payment/webhook", async (req, res) => {
+    console.log("🔥 RAZORPAY WEBHOOK TRIGGERED!");
   try {
     console.log("Razorpay webhook received!");
 
