@@ -23,7 +23,16 @@ app.use(cors({
   origin:allowedOrigins,
   credentials:true
 }));
-app.use(express.json());
+// Capture Razorpay raw body before JSON parsing
+app.use(
+  express.json({
+    verify: (req, res, buf) => {
+      if (req.originalUrl.includes("/payment/webhook")) {
+        req.rawBody = Buffer.from(buf);
+      }
+    },
+  })
+);
 app.use(cookieParser());
 
 app.use('/',authRouter);
