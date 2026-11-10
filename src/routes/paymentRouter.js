@@ -54,8 +54,6 @@ paymentRouter.post("/payment/create", userAuth, async (req, res) => {
 paymentRouter.post("/payment/webhook", async (req, res) => {
     console.log("🔥 RAZORPAY WEBHOOK TRIGGERED!");
   try {
-    console.log("Razorpay webhook received!");
-
     const webhookSignature = req.get("X-Razorpay-Signature");
 
     if (!req.rawBody || !webhookSignature) {
@@ -64,12 +62,17 @@ paymentRouter.post("/payment/webhook", async (req, res) => {
       });
     }
 
+    console.log("Signature exists:", !!webhookSignature);
+    console.log("Raw body exists:", !!req.body);
+
     // 1. Verify webhook signature
     const isWebhookValid = validateWebhookSignature(
-      req.rawBody.toString("utf8"),
+      req.body,
       webhookSignature,
       process.env.RAZORPAY_WEBHOOK_SECRET
     );
+
+    console.log("Signature valid:", isWebhookValid);
 
     if (!isWebhookValid) {
       return res.status(400).json({
@@ -79,6 +82,8 @@ paymentRouter.post("/payment/webhook", async (req, res) => {
 
     // 2. Check event type
     const event = req.body.event;
+
+        console.log("Webhook event:", event);
 
     if (event !== "payment.captured") {
       return res.status(200).json({
